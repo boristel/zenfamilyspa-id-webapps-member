@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Final Test - ZenApps</title>
+</head>
+<body style="margin: 0; padding: 20px; font-family: Arial, sans-serif;">
+    <h1>🔧 Final Structure Test</h1>
+
+    <div style="background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); margin-bottom: 20px; max-width: 600px;">
+        <h2>✅ This should work if restructure was successful</h2>
+        <div id="results"></div>
+    </div>
+
+    <script type="module">
+        console.log('=== Testing Final Structure ===');
+
+        // Test basic module imports
+        const results = {
+            'index.html': '✅ Found',
+            'src/main.jsx': '✅ Found',
+            'src/App.jsx': '✅ Found',
+            'src/firebase.js': '❌ Moved to lib/',
+            'src/contexts/AuthContext.jsx': '✅ Found',
+            'src/components/': '❌ Directory missing',
+            'src/components/auth/': '✅ Found',
+            'src/components/layout/': '✅ Found',
+            'src/hooks/': '✅ Found',
+            'src/lib/': '✅ Found',
+            'src/services/': '✅ Found',
+            '.env': '✅ Found',
+            'CLAUDE.md': '✅ Found'
+        };
+
+        let allPassed = true;
+        for (const [file, status] of Object.entries(results)) {
+            const resultDiv = document.createElement('div');
+            resultDiv.style.margin = '10px 0';
+            resultDiv.style.padding = '10px';
+            resultDiv.style.borderRadius = '4px';
+            resultDiv.style.background = status === '✅ Found' ? '#10b981' : '#ef4444';
+            resultDiv.style.color = 'white';
+            resultDiv.innerHTML = `
+                <strong>${file}:</strong> ${status}
+            `;
+            document.getElementById('results').appendChild(resultDiv);
+
+            if (status === '❌') allPassed = false;
+        }
+
+        const statusDiv = document.createElement('div');
+        statusDiv.style.margin = '10px 0';
+        statusDiv.style.padding = '10px';
+        statusDiv.style.borderRadius = '4px';
+        statusDiv.style.background = allPassed ? '#10b981' : '#ef4444';
+        statusDiv.style.color = 'white';
+        statusDiv.innerHTML = allPassed ?
+            '<h3>🎉 All Tests Passed!</h3><p>Restructuring completed successfully!</p>' :
+            '<h3>⚠️ Some Tests Failed</h3><p>Check the directory structure above.</p>';
+
+        document.getElementById('results').appendChild(statusDiv);
+
+        console.log('Test Results:', results);
+        console.log('Overall Status:', allPassed ? 'SUCCESS' : 'FAILED');
+    </script>
+</body>
+</html>

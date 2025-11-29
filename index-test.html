@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>React Test - ZenApps</title>
+</head>
+<body>
+    <h1>🔍 React Module Test</h1>
+    <div id="output" style="background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); margin-bottom: 20px;"></div>
+
+    <script type="module">
+        console.log('=== Testing React Module Loading ===');
+
+        // Test 1: Basic module import
+        try {
+            const response = await fetch('/src/main.jsx');
+            console.log('Fetch response status:', response.status);
+
+            if (response.ok) {
+                document.getElementById('output').innerHTML += '<p>✅ Module fetch successful</p>';
+            } else {
+                document.getElementById('output').innerHTML += '<p>❌ Module fetch failed</p>';
+            }
+        } catch (error) {
+            document.getElementById('output').innerHTML += '<p>❌ Module fetch error: ' + error.message + '</p>';
+        }
+
+        // Test 2: Try to load React directly
+        try {
+            const React = await import('react');
+            document.getElementById('output').innerHTML += '<p>✅ React import successful</p>';
+        } catch (error) {
+            document.getElementById('output').innerHTML += '<p>❌ React import error: ' + error.message + '</p>';
+        }
+
+        // Test 3: Try to load main module
+        try {
+            const mainModule = await import('/src/main.jsx');
+            console.log('Main module:', mainModule);
+            if (mainModule && typeof mainModule.default === 'function') {
+                document.getElementById('output').innerHTML += '<p>✅ Main module loaded successfully</p>';
+            } else {
+                document.getElementById('output').innerHTML += '<p>❌ Main module not a function</p>';
+            }
+        } catch (error) {
+            document.getElementById('output').innerHTML += '<p>❌ Main module error: ' + error.message + '</p>';
+        }
+
+        console.log('Test completed');
+    </script>
+</body>
+</html>

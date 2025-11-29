@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Simple Test</title>
+</head>
+<body>
+    <h1>Simple Test Page</h1>
+    <div id="test-output"></div>
+
+    <script type="module">
+        console.log('Testing basic JavaScript...');
+
+        try {
+            const testEnv = import.meta.env.VITE_TEST_VAR || 'not-found';
+            document.getElementById('test-output').innerHTML = `
+                <h2>Environment Test</h2>
+                <p>VITE_TEST_VAR: ${testEnv}</p>
+            `;
+        } catch (error) {
+            document.getElementById('test-output').innerHTML = `
+                <h2>Error</h2>
+                <p>${error.message}</p>
+            `;
+        }
+    </script>
+</body>
+</html>

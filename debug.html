@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debug - ZenApps</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: #f8fafc;
+        }
+        .debug-card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+            max-width: 600px;
+        }
+        .status {
+            padding: 10px;
+            border-radius: 4px;
+            margin: 10px 0;
+        }
+        .success { background: #10b981; color: white; }
+        .error { background: #ef4444; color: white; }
+        .warning { background: #f59e0b; color: white; }
+        .env-var {
+            background: #f3f4f6;
+            padding: 8px;
+            border-radius: 4px;
+            font-family: monospace;
+            word-break: break-all;
+        }
+    </style>
+</head>
+<body>
+    <h1>🔍 ZenApps Debug Console</h1>
+
+    <div class="debug-card">
+        <h2>Environment Variables</h2>
+        <div id="env-status" class="status">Loading...</div>
+        <div id="env-vars"></div>
+
+        <h2>Test Results</h2>
+        <div id="test-results"></div>
+    </div>
+
+    <script>
+        // Test environment variables
+        const envTests = [
+            { name: 'VITE_FIREBASE_API_KEY', required: true },
+            { name: 'VITE_FIREBASE_AUTH_DOMAIN', required: true },
+            { name: 'VITE_FIREBASE_PROJECT_ID', required: true },
+            { name: 'VITE_FIREBASE_APP_ID', required: true },
+            { name: 'VITE_FIREBASE_STORAGE_BUCKET', required: false },
+            { name: 'VITE_FIREBASE_MESSAGING_SENDER_ID', required: false },
+            { name: 'VITE_FIREBASE_MEASUREMENT_ID', required: false }
+        ];
+
+        let envHTML = '<div class="env-var">';
+        let allPassed = true;
+
+        envTests.forEach(test => {
+            const value = import.meta.env[test.name];
+            const status = value ? 'success' : (test.required ? 'error' : 'warning');
+            const statusClass = status;
+
+            if (test.required && !value) allPassed = false;
+
+            envHTML += `
+                <div style="margin-bottom: 10px;">
+                    <strong>${test.name}:</strong> ${statusClass}
+                </div>
+                <div style="font-size: 12px; word-break: break-all;">
+                    ${value || 'NOT SET'}
+                </div>
+            `;
+        });
+
+        envHTML += '</div>';
+
+        document.getElementById('env-status').className = `status ${allPassed ? 'success' : 'error'}`;
+        document.getElementById('env-status').textContent = allPassed ? '✅ All Required Variables Present' : '❌ Missing Required Variables';
+        document.getElementById('env-vars').innerHTML = envHTML;
+
+        // Test Firebase module loading
+        const testResults = document.getElementById('test-results');
+        const tests = [
+            { name: 'React Import', test: () => typeof React !== 'undefined' },
+            { name: 'Vite Import', test: () => typeof createRoot !== 'undefined' },
+            { name: 'Firebase App Import', test: async () => {
+                try {
+                    const firebase = await import('./src/lib/firebase.js');
+                    return typeof firebase.app === 'function';
+                } catch (e) {
+                    console.error('Firebase import error:', e);
+                    return false;
+                }
+            }},
+            { name: 'Environment Variables', test: () => allPassed }
+        ];
+
+        let resultsHTML = '<h3>Component Tests:</h3>';
+        let allTestsPassed = true;
+
+        for (const test of tests) {
+            try {
+                const result = await test.test();
+                const status = result ? 'success' : 'error';
+                const statusClass = status;
+
+                if (test.name === 'Environment Variables' && !result) {
+                    allTestsPassed = false;
+                }
+
+                resultsHTML += `
+                    <div class="status ${statusClass}">
+                        <strong>${test.name}:</strong> ${result ? '✅ PASS' : '❌ FAIL'}
+                    </div>
+                `;
+            } catch (e) {
+                allTestsPassed = false;
+                resultsHTML += `
+                    <div class="status error">
+                        <strong>${test.name}:</strong> ❌ ERROR - ${e.message}
+                    </div>
+                `;
+            }
+        }
+
+        testResults.innerHTML = resultsHTML;
+
+        // Overall status
+        if (allTestsPassed) {
+            testResults.innerHTML += '<div class="status success"><strong>🎉 All Tests Passed!</strong></div>';
+        } else {
+            testResults.innerHTML += '<div class="status error"><strong>⚠️ Some Tests Failed - Check Console</strong></div>';
+        }
+
+        console.log('🔍 Debug page loaded. Check the results above.');
+        console.log('Environment variables:', import.meta.env);
+        console.log('Firebase modules available:', {
+            React: typeof React !== 'undefined',
+            createRoot: typeof createRoot !== 'undefined',
+            Firebase: 'Test in results above'
+        });
+    </script>
+</body>
+</html>

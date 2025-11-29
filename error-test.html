@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Error Test - ZenApps</title>
+</head>
+<body>
+    <h1>🔍 Error Testing</h1>
+    <div id="test-output" style="background: white; padding: 20px; border-radius: 8px; max-width: 600px; margin: 20px auto;"></div>
+
+    <script>
+        console.log('=== Testing Basic JavaScript ===');
+        document.getElementById('test-output').innerHTML = '<p>✅ Basic JavaScript working</p>';
+
+        // Test 1: Try to create an element (this might fail if React is broken)
+        try {
+            const testDiv = document.createElement('div');
+            testDiv.innerHTML = '<p>✅ DOM manipulation working</p>';
+            document.getElementById('test-output').appendChild(testDiv);
+        } catch (e) {
+            document.getElementById('test-output').innerHTML += '<p>❌ DOM manipulation failed: ' + e.message + '</p>';
+        }
+
+        // Test 2: Check if React is available
+        if (typeof React !== 'undefined') {
+            document.getElementById('test-output').innerHTML += '<p>✅ React available</p>';
+        } else {
+            document.getElementById('test-output').innerHTML += '<p>❌ React not available</p>';
+        }
+
+        // Test 3: Check for obvious errors
+        console.log('Current page URL:', window.location.href);
+        console.log('Document ready state:', document.readyState);
+        console.log('Any global errors:', window.error);
+
+        document.getElementById('test-output').innerHTML += '<hr><h3>Environment Info:</h3><pre>' + JSON.stringify({
+            userAgent: navigator.userAgent,
+            timestamp: new Date().toISOString(),
+            url: window.location.href
+        }, null, 2) + '</pre>';
+    </script>
+</body>
+</html>
