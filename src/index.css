@@ -1,1 +1,12 @@
 @import "tailwindcss";
+
+:root {
+    --color-zen-green: #8DA399;
+    --color-zen-sand: #F5F5F1;
+    --color-zen-brown: #5D4037;
+}
+
+body {
+    background-color: var(--color-zen-sand);
+    color: var(--color-zen-brown);
+}

@@ -1,41 +1,36 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import { AuthProvider, useAuth } from './context/AuthContext';
+import { AuthProvider } from './context/AuthContext';
+import { RequireAuth } from './components/auth/RequireAuth';
 import { DashboardLayout } from './components/layout/DashboardLayout';
 import { HomePage } from './pages/HomePage';
 import { HistoryPage } from './pages/HistoryPage';
 import { ProfilePage } from './pages/ProfilePage';
 import { LoginPage } from './pages/LoginPage';
 import { RegisterForm } from './features/auth/RegisterForm';
-
-function ProtectedRoute({ children }) {
-  const { user, loading } = useAuth();
-
-  if (loading) {
-    return <div className="flex h-screen items-center justify-center">Loading...</div>;
-  }
-
-  if (!user) {
-    return <Navigate to="/login" />;
-  }
-
-  return children;
-}
+import { SetupPinPage } from './pages/SetupPinPage';
+import { VerifyPinPage } from './pages/VerifyPinPage';
 
 function AppRoutes() {
   return (
     <Routes>
+      {/* Public routes */}
       <Route path="/login" element={<LoginPage />} />
       <Route path="/register" element={
-        <div className="flex min-h-screen items-center justify-center bg-gray-50 p-4">
+        <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-zen-sand via-white to-spa-50 p-4">
           <RegisterForm />
         </div>
       } />
 
+      {/* PIN setup and verification routes */}
+      <Route path="/setup-pin" element={<SetupPinPage />} />
+      <Route path="/verify-pin" element={<VerifyPinPage />} />
+
+      {/* Protected routes */}
       <Route path="/" element={
-        <ProtectedRoute>
+        <RequireAuth>
           <DashboardLayout />
-        </ProtectedRoute>
+        </RequireAuth>
       }>
         <Route index element={<HomePage />} />
         <Route path="history" element={<HistoryPage />} />

@@ -44,16 +44,16 @@ export function LoginForm() {
   };
 
   return (
-    <Card className="w-full max-w-md mx-auto">
+    <Card className="w-full max-w-md backdrop-blur-md bg-white/90 shadow-zen-lg border-zen-green/20">
       <CardHeader>
-        <CardTitle className="text-2xl text-center">Welcome Back</CardTitle>
-        <CardDescription className="text-center">
-          Enter your credentials to access your account
+        <CardTitle className="text-2xl text-center text-zen-brown">Welcome to ZenApps</CardTitle>
+        <CardDescription className="text-center text-zen-brown/70">
+          Enter your credentials to access your wellness journey
         </CardDescription>
       </CardHeader>
       <CardContent>
         {error && (
-          <div className="mb-4 p-3 rounded-lg bg-red-50 border border-red-200 text-red-700 text-sm">
+          <div className="mb-4 p-3 rounded-xl bg-red-50 border border-red-200 text-red-700 text-sm">
             {error}
           </div>
         )}
@@ -66,6 +66,7 @@ export function LoginForm() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
+              className="bg-zen-sand/50 border-zen-green/30 focus:border-zen-green focus:ring-zen-green"
             />
           </div>
           <div className="space-y-2">
@@ -75,26 +76,31 @@ export function LoginForm() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
+              className="bg-zen-sand/50 border-zen-green/30 focus:border-zen-green focus:ring-zen-green"
             />
           </div>
-          <Button type="submit" className="w-full" disabled={loading || googleLoading}>
+          <Button
+            type="submit"
+            className="w-full bg-zen-green hover:bg-zen-green/90 text-white shadow-md"
+            disabled={loading || googleLoading}
+          >
             {loading ? 'Signing in...' : 'Sign In'}
           </Button>
         </form>
 
         <div className="relative my-6">
           <div className="absolute inset-0 flex items-center">
-            <div className="w-full border-t border-gray-200"></div>
+            <div className="w-full border-t border-zen-green/20"></div>
           </div>
           <div className="relative flex justify-center text-sm">
-            <span className="px-2 bg-white text-gray-500">Or continue with</span>
+            <span className="px-2 bg-white/90 text-zen-brown/60">Or continue with</span>
           </div>
         </div>
 
         <Button
           type="button"
           variant="outline"
-          className="w-full"
+          className="w-full border-zen-green/30 hover:bg-zen-sand/50 text-zen-brown"
           onClick={handleGoogleSignIn}
           disabled={loading || googleLoading}
         >
@@ -119,9 +125,9 @@ export function LoginForm() {
           {googleLoading ? 'Signing in...' : 'Sign in with Google'}
         </Button>
       </CardContent>
-      <CardFooter className="justify-center">
-        <p className="text-sm text-gray-500">
-          Don't have an account? <a href="/register" className="text-blue-600 hover:underline">Sign up</a>
+      <CardFooter className="justify-center border-t border-zen-green/10 pt-6">
+        <p className="text-sm text-zen-brown/60">
+          Don't have an account? <a href="/register" className="text-zen-green hover:text-zen-green/80 font-medium underline">Sign up</a>
         </p>
       </CardFooter>
     </Card>

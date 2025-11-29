@@ -7,6 +7,10 @@ export default {
   theme: {
     extend: {
       colors: {
+        // Zen color palette
+        'zen-green': '#8DA399',
+        'zen-sand': '#F5F5F1',
+        'zen-brown': '#5D4037',
         // Luxurious spa-inspired color palette
         'zen': {
           50: '#fdfafa',    // Softest background
