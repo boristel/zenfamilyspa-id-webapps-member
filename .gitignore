@@ -31,5 +31,8 @@ dist-ssr
 
 # Configuration files with sensitive data
 firebase-config.js
+GoogleService-Info.plist
+web-sdk.json
+google-services.json
 
 nul
